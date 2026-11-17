@@ -21,6 +21,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FRONTEND = os.path.join(HERE, "..", "frontend")
 
 app = Flask(__name__, static_folder=FRONTEND, static_url_path="")
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["https://aquacheck-ai-frontend.vercel.app"]
+    }
+})
 
 model = joblib.load(os.path.join(HERE, "model", "model.joblib"))
 with open(os.path.join(HERE, "model", "meta.json")) as fh:

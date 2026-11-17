@@ -7,7 +7,7 @@ let META = null;
 let lastResult = null;
 const values = {};
 const history = [];
-
+const API_BASE = "https://aquacheck-ai-backend.onrender.com";
 /* ---------- live glass (visual only) ---------- */
 const PH_STOPS = [[3, "#e0463a"], [5, "#f08a3c"], [6.2, "#e9d04a"], [7, "#8fcf6a"], [8, "#4fbfb0"], [9.5, "#3d8fd1"], [11, "#7a5bc7"]];
 const hex2rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -96,7 +96,7 @@ async function checkWater() {
   btn.disabled = true;
   btn.textContent = "Checking...";
   try {
-    const res = await fetch("/api/predict", {
+    const res = await fetch(`${API_BASE}/api/predict`, {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values }),
     });
     const data = await res.json();
@@ -221,7 +221,7 @@ async function sendMessage(text) {
   $("#msgs").appendChild(typing);
   $("#msgs").scrollTop = $("#msgs").scrollHeight;
   try {
-    const res = await fetch("/api/chat", {
+    const res = await fetch(`${API_BASE}/api/chat`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: text, history: history.slice(-8), context: lastResult }),
     });
@@ -258,7 +258,7 @@ async function init() {
   setSuggestions(["What is turbidity?", "How accurate is the model?", "How can I improve water quality?"]);
 
   try {
-    const res = await fetch("/api/meta");
+    const res = await fetch(`${API_BASE}/api/meta`);
     if (!res.ok) throw new Error();
     META = await res.json();
   } catch {
