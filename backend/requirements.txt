@@ -1,6 +1,7 @@
-flask
-scikit-learn
-pandas
-numpy
-joblib
+Flask
+flask-cors==6.0.5
 gunicorn
+joblib
+numpy
+pandas
+scikit-learn
