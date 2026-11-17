@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AquaCheckAI - Is your water safe to drink?</title>
+<meta name="description" content="Enter nine water measurements and a machine-learning model estimates whether the water is potable.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C11 11 7 15.500 7 20a9 9 0 0 0 18 0c0-4.500-4-9-9-17z' fill='%231593A8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="AquaCheckAI home">
+    <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M16 3C11 11 7 15.500 7 20a9 9 0 0 0 18 0c0-4.500-4-9-9-17z" fill="currentColor"/></svg>
+    <span>AquaCheckAI</span>
+  </a>
+  <nav aria-label="Sections">
+    <a href="#check">Check water</a>
+    <a href="#model">The model</a>
+    <button class="link-btn" id="open-chat-nav" type="button">Ask AquaBot</button>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-copy">
+      <h1>Move a slider.<br>Watch the water change.</h1>
+      <p class="lede">Enter nine measurements from a water report. A machine-learning model estimates whether the sample is safe to drink, and tells you which numbers pushed it there.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#check">Check a sample</a>
+        <button class="btn ghost" id="open-chat-hero" type="button">Ask AquaBot a question</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="lab" id="check">
+    <aside class="bench" aria-label="Live water glass">
+      <div class="glass-wrap">
+        <svg id="glass" viewBox="0 0 240 330" role="img" aria-label="A glass of water that changes colour with pH and cloudiness with turbidity">
+          <defs>
+            <clipPath id="inside"><path d="M52 48 H188 L174 292 Q173 304 160 304 H80 Q67 304 66 292 Z"/></clipPath>
+            <linearGradient id="sheen" x1="0" x2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+              <stop offset=".25" stop-color="#fff" stop-opacity="0"/>
+              <stop offset=".85" stop-color="#fff" stop-opacity="0"/>
+              <stop offset="1" stop-color="#fff" stop-opacity=".35"/>
+            </linearGradient>
+          </defs>
+          <g clip-path="url(#inside)">
+            <rect x="40" y="40" width="170" height="270" fill="#eef8f8"/>
+            <g id="water">
+              <rect id="water-body" x="40" y="108" width="170" height="210" fill="#8fcf6a" opacity=".6"/>
+              <path id="wave" d="M20 108 q 25 -10 50 0 t 50 0 t 50 0 t 50 0 t 50 0 V130 H20 Z" fill="#8fcf6a" opacity=".6"/>
+              <rect id="cloud" x="40" y="100" width="170" height="220" fill="#b9a27a" opacity="0"/>
+              <g id="bubbles" fill="#fff" fill-opacity=".7">
+                <circle class="bub" cx="95"  cy="290" r="4"/>
+                <circle class="bub" cx="125" cy="295" r="3"/>
+                <circle class="bub" cx="150" cy="288" r="5"/>
+                <circle class="bub" cx="110" cy="298" r="2.500"/>
+                <circle class="bub" cx="138" cy="292" r="3.500"/>
+              </g>
+            </g>
+            <rect x="52" y="48" width="136" height="260" fill="url(#sheen)"/>
+          </g>
+          <path d="M52 48 H188 L174 292 Q173 304 160 304 H80 Q67 304 66 292 Z" fill="none" stroke="#0E2F44" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M48 48 H192" stroke="#0E2F44" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+
+        <div class="strip" aria-hidden="true">
+          <div class="strip-bar"><span id="strip-marker"></span></div>
+          <div class="strip-scale"><span>pH 3</span><span>7</span><span>11</span></div>
+        </div>
+      </div>
+      <p class="bench-note" id="glass-note">The glass tints like a pH indicator and clouds with turbidity. It is a visual aid, not a prediction.</p>
+    </aside>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Water sample</h2>
+          <p class="muted">Shaded part of each bar marks where most safe samples in the training data fall.</p>
+        </div>
+        <div class="presets" role="group" aria-label="Example samples" id="presets"></div>
+      </div>
+
+      <div id="load-error" class="notice" hidden></div>
+      <form id="form" class="sliders" autocomplete="off"></form>
+
+      <div class="actions">
+        <button class="btn primary big" id="check-btn" type="button">Check water</button>
+        <button class="btn ghost" id="reset-btn" type="button">Reset to average</button>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <div class="verdict">
+          <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="52" class="ring-bg"/>
+            <circle cx="60" cy="60" r="52" class="ring-fg" id="ring-fg" transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="verdict-text">
+            <p class="pct"><span id="pct">0</span>%</p>
+            <h3 id="verdict-title"></h3>
+            <p class="muted" id="verdict-sub"></p>
+          </div>
+        </div>
+
+        <h4>What moved the score</h4>
+        <p class="muted small">Each bar shows how many points the probability would change if that value were typical instead.</p>
+        <div id="drivers" class="drivers"></div>
+
+        <h4>Range check</h4>
+        <ul id="chips" class="chips"></ul>
+
+        <button class="btn soft" id="explain-btn" type="button">Ask AquaBot to explain this result</button>
+        <p class="fine">AquaCheckAI is an educational ML project. It is not a substitute for a certified laboratory test.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="model" id="model">
+    <h2>How well does the model work?</h2>
+    <p class="lede" id="model-lede">Loading model details...</p>
+    <div class="model-grid">
+      <div>
+        <h3>Scores on unseen data</h3>
+        <dl class="scores" id="scores"></dl>
+      </div>
+      <div>
+        <h3>What the model looks at</h3>
+        <div id="importance" class="importance"></div>
+      </div>
+      <div>
+        <h3>Test-set confusion matrix</h3>
+        <div id="matrix" class="matrix"></div>
+      </div>
+    </div>
+    <p class="fine">Potability is hard to predict from nine numbers, so a score near 70% is normal for this kind of dataset. Use the result as a screening hint.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>AquaCheckAI by Soham De, Asansol Engineering College. Built with Python, scikit-learn, Flask, HTML, CSS and JavaScript.</p>
+</footer>
+
+<!-- AquaBot chat -->
+<button class="chat-fab" id="chat-fab" type="button" aria-expanded="false" aria-controls="chat">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3.500V17H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="currentColor"/></svg>
+  <span>Ask AquaBot</span>
+  <i class="dot" id="chat-dot" hidden></i>
+</button>
+
+<section class="chat" id="chat" role="dialog" aria-label="AquaBot assistant" hidden>
+  <header>
+    <div>
+      <strong>AquaBot</strong>
+      <span class="mode" id="chat-mode">offline mode</span>
+    </div>
+    <button type="button" id="chat-close" class="icon-btn" aria-label="Close chat">&times;</button>
+  </header>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <div class="suggest" id="suggest"></div>
+  <form class="composer" id="composer">
+    <input id="chat-input" type="text" placeholder="Ask about your water..." aria-label="Message AquaBot" maxlength="500" autocomplete="off">
+    <button class="btn primary" type="submit">Send</button>
+  </form>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

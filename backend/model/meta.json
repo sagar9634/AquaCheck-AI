@@ -1,0 +1,194 @@
+{
+  "best_model": "Random Forest",
+  "dataset_rows": 3300,
+  "potable_share": 0.4,
+  "metrics": {
+    "accuracy": 0.7318,
+    "precision": 0.6706,
+    "recall": 0.6477,
+    "f1": 0.659,
+    "cv_f1": 0.6631,
+    "confusion_matrix": [
+      [
+        312,
+        84
+      ],
+      [
+        93,
+        171
+      ]
+    ]
+  },
+  "all_metrics": {
+    "Logistic Regression": {
+      "accuracy": 0.6561,
+      "precision": 0.5636,
+      "recall": 0.6212,
+      "f1": 0.591,
+      "cv_f1": 0.6205,
+      "confusion_matrix": [
+        [
+          269,
+          127
+        ],
+        [
+          100,
+          164
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 0.7318,
+      "precision": 0.6706,
+      "recall": 0.6477,
+      "f1": 0.659,
+      "cv_f1": 0.6631,
+      "confusion_matrix": [
+        [
+          312,
+          84
+        ],
+        [
+          93,
+          171
+        ]
+      ]
+    }
+  },
+  "importance": {
+    "ph": 0.1594,
+    "Hardness": 0.068,
+    "Solids": 0.1235,
+    "Chloramines": 0.1148,
+    "Sulfate": 0.0679,
+    "Conductivity": 0.0676,
+    "Organic_carbon": 0.098,
+    "Trihalomethanes": 0.1572,
+    "Turbidity": 0.1436
+  },
+  "features": [
+    {
+      "key": "ph",
+      "label": "pH",
+      "unit": "",
+      "hint": "How acidic or basic the water is",
+      "min": 3.07,
+      "max": 11.21,
+      "median": 7.1,
+      "safe_low": 5.67,
+      "safe_high": 8.51
+    },
+    {
+      "key": "Hardness",
+      "label": "Hardness",
+      "unit": "mg/L",
+      "hint": "Calcium & magnesium dissolved in water",
+      "min": 107.9,
+      "max": 284.07,
+      "median": 196.29,
+      "safe_low": 155.88,
+      "safe_high": 239.3
+    },
+    {
+      "key": "Solids",
+      "label": "Total Dissolved Solids",
+      "unit": "ppm",
+      "hint": "Minerals and salts dissolved in water",
+      "min": 320.0,
+      "max": 44627.73,
+      "median": 21594.14,
+      "safe_low": 9818.96,
+      "safe_high": 30216.31
+    },
+    {
+      "key": "Chloramines",
+      "label": "Chloramines",
+      "unit": "ppm",
+      "hint": "Disinfectant used in public water",
+      "min": 3.1,
+      "max": 11.21,
+      "median": 7.03,
+      "safe_low": 5.05,
+      "safe_high": 8.6
+    },
+    {
+      "key": "Sulfate",
+      "label": "Sulfate",
+      "unit": "mg/L",
+      "hint": "Naturally occurring mineral",
+      "min": 231.42,
+      "max": 433.62,
+      "median": 333.58,
+      "safe_low": 289.14,
+      "safe_high": 381.97
+    },
+    {
+      "key": "Conductivity",
+      "label": "Conductivity",
+      "unit": "\u03bcS/cm",
+      "hint": "How well water conducts electricity",
+      "min": 221.45,
+      "max": 623.79,
+      "median": 431.13,
+      "safe_low": 324.23,
+      "safe_high": 536.79
+    },
+    {
+      "key": "Organic_carbon",
+      "label": "Organic Carbon",
+      "unit": "ppm",
+      "hint": "Decaying natural matter",
+      "min": 6.03,
+      "max": 22.6,
+      "median": 14.32,
+      "safe_low": 9.87,
+      "safe_high": 17.78
+    },
+    {
+      "key": "Trihalomethanes",
+      "label": "Trihalomethanes",
+      "unit": "\u03bcg/L",
+      "hint": "By-products of chlorination",
+      "min": 25.89,
+      "max": 110.01,
+      "median": 67.45,
+      "safe_low": 44.19,
+      "safe_high": 80.51
+    },
+    {
+      "key": "Turbidity",
+      "label": "Turbidity",
+      "unit": "NTU",
+      "hint": "Cloudiness of the water",
+      "min": 1.96,
+      "max": 6.09,
+      "median": 3.97,
+      "safe_low": 2.89,
+      "safe_high": 4.61
+    }
+  ],
+  "presets": {
+    "Good sample": {
+      "ph": 7.06,
+      "Hardness": 188.3,
+      "Solids": 15975.32,
+      "Chloramines": 6.38,
+      "Sulfate": 333.25,
+      "Conductivity": 448.73,
+      "Organic_carbon": 12.5,
+      "Trihalomethanes": 55.35,
+      "Turbidity": 3.62
+    },
+    "Risky sample": {
+      "ph": 5.02,
+      "Hardness": 196.72,
+      "Solids": 27182.77,
+      "Chloramines": 7.9,
+      "Sulfate": 348.91,
+      "Conductivity": 433.56,
+      "Organic_carbon": 15.47,
+      "Trihalomethanes": 93.67,
+      "Turbidity": 4.79
+    }
+  }
+}
